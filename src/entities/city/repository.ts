@@ -2,9 +2,9 @@ import { createErr, createOk } from 'option-t/plain_result'
 import type { City, APICity } from './types'
 import { BaseError, type APIResponse } from '~/helpers'
 
-const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search'
+export const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search'
 
-class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
+export class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
 
 const parseApiResponse = (data: APIResponse<APICity>): City[] => data.results.map(({ id, name, latitude, longitude }) => ({ id, name, latitude, longitude }))
 
