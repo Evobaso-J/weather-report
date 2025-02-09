@@ -7,5 +7,6 @@ export default defineVitestConfig({
       include: ['**/*test.ts'],
       ignoreSourceErrors: true,
     },
+    environment: 'nuxt',
   },
 })
