@@ -6,7 +6,10 @@ export default defineNuxtConfig({
     typeCheck: true,
   },
 
-  modules: ['@nuxt/eslint'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/ui',
+  ],
 
   eslint: {
     config: {
@@ -18,4 +21,8 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   ssr: false,
   compatibilityDate: '2024-07-04',
+
+  colorMode: {
+    preference: 'light',
+  },
 })
