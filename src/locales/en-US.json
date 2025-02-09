@@ -1,0 +1,6 @@
+{
+  "app": {
+    "name": "Nuxt Starter",
+    "titleTemplate": "%s • @:app.name"
+  }
+}
