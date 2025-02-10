@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@nuxt/eslint':
         specifier: ^0.3.13
         version: 0.3.13(eslint@8.57.0)(rollup@4.18.0)(typescript@5.4.4)(vite-plugin-eslint2@4.4.0(@types/eslint@8.56.10)(eslint@8.57.0)(rollup@4.18.0)(vite@5.3.2(@types/node@20.14.9)(terser@5.31.1)))(vite@5.3.2(@types/node@20.14.9)(terser@5.31.1))
@@ -832,6 +835,9 @@ packages:
 
   '@iconify-json/heroicons@1.2.2':
     resolution: {integrity: sha512-qoW4pXr5kTTL6juEjgTs83OJIwpePu7q1tdtKVEdj+i0zyyVHgg/dd9grsXJQnpTpBt6/VwNjrXBvFjRsKPENg==}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
 
   '@iconify/collections@1.0.515':
     resolution: {integrity: sha512-4aJAgfv31fST8LYjuGy14ZQN8zIDQpKuHRQXZgilQMDh6SW2YFiIWMWKd7MSEmRXwRQdygwPrAydelBNHW+qqw==}
@@ -6469,6 +6475,10 @@ snapshots:
   '@humanwhocodes/object-schema@2.0.3': {}
 
   '@iconify-json/heroicons@1.2.2':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/mdi@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
 
