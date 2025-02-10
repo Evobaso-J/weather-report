@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/ui',
     '@nuxt/test-utils/module',
+    '@nuxt/image',
   ],
 
   eslint: {
