@@ -1,8 +1,7 @@
 import { createErr, createOk } from 'option-t/plain_result'
+import { GEOCODING_API_URL } from '../config'
 import type { City, APICity } from './types'
 import { BaseError, type APIResponse } from '~/helpers'
-
-export const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search'
 
 export class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
 
