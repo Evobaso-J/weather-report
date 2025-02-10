@@ -15,6 +15,7 @@ const API_CITY_MOCK: APICity = {
   name: 'testName',
   population: 100,
   timezone: 'testTimezone',
+  admin1: 'testAdmin1',
 }
 
 const API_CITY_RESPONSE_MOCK: APIResponse<APICity> = {
@@ -26,6 +27,8 @@ const CITY_MOCK: City = {
   name: 'testName',
   latitude: -1,
   longitude: -1,
+  country: 'testCountry',
+  admin1: 'testAdmin1',
 }
 
 const $mockedFetch = vi.hoisted(() => vi.fn())
@@ -57,6 +60,14 @@ describe('cityRepository', () => {
       const result = await city.query({ name: 'testName' })
 
       expect(result).toEqual({ ok: true, val: [CITY_MOCK], err: null })
+    })
+    it('should return an empty list wrapped in an Ok result if the request is successful but no results are returned', async () => {
+      $mockedFetch.mockResolvedValueOnce({ ...API_CITY_RESPONSE_MOCK, results: undefined })
+      const city = cityRepository()
+
+      const result = await city.query({ name: 'testName' })
+
+      expect(result).toEqual({ ok: true, val: [], err: null })
     })
     it('should return an error wrapped in an Err if the request fails', async () => {
       $mockedFetch.mockRejectedValueOnce(new Error('testError'))

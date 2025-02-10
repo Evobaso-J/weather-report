@@ -3,5 +3,6 @@
     "name": "Weather Report",
     "titleTemplate": "%s • @:app.name"
   },
-  "home": "Home"
+  "home": "Home",
+  "searchCity": "Search for a city..."
 }

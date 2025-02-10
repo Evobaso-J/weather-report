@@ -10,6 +10,7 @@ export type APICity = {
   name: string
   population: number
   timezone: string
+  admin1: string
 }
 
 export type City = {
@@ -17,4 +18,6 @@ export type City = {
   name: string
   latitude: number
   longitude: number
+  country: string
+  admin1: string
 }
