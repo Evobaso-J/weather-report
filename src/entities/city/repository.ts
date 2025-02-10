@@ -6,7 +6,10 @@ export const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search
 
 export class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
 
-const parseApiResponse = (data: APIResponse<APICity>): City[] => data.results.map(({ id, name, latitude, longitude }) => ({ id, name, latitude, longitude }))
+const parseApiResponse = (data: APIResponse<APICity>): City[] => {
+  if (!data.results) return []
+  return data.results.map(({ id, name, latitude, longitude }) => ({ id, name, latitude, longitude }))
+}
 
 export const cityRepository = createRepository({
   query: async ({ name }: { name: string }) => {

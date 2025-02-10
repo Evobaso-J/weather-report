@@ -58,6 +58,14 @@ describe('cityRepository', () => {
 
       expect(result).toEqual({ ok: true, val: [CITY_MOCK], err: null })
     })
+    it('should return an empty list wrapped in an Ok result if the request is successful but no results are returned', async () => {
+      $mockedFetch.mockResolvedValueOnce({ ...API_CITY_RESPONSE_MOCK, results: undefined })
+      const city = cityRepository()
+
+      const result = await city.query({ name: 'testName' })
+
+      expect(result).toEqual({ ok: true, val: [], err: null })
+    })
     it('should return an error wrapped in an Err if the request fails', async () => {
       $mockedFetch.mockRejectedValueOnce(new Error('testError'))
       const city = cityRepository()
