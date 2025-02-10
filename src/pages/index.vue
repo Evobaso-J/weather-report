@@ -1,9 +1,12 @@
 <template>
-  <div class="flex">
-    <DaySelector />
-    <pre>
-      {{ data }}
-    </pre>
+  <div class="flex gap-10">
+    <DaySelector @change="setDate" />
+    <div>
+      CURRENT DATE{{ currentDate }}
+      <pre>
+        {{ data }}
+      </pre>
+    </div>
   </div>
 </template>
 
@@ -18,4 +21,9 @@ useHead({
 
 const cityRepo = cityRepository()
 const { data } = await useAsyncData(() => cityRepo.query({ name: 'milano' }))
+
+const currentDate = ref<string>()
+const setDate = (ISODate: string) => {
+  currentDate.value = ISODate
+}
 </script>
