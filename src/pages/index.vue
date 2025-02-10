@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="flex">
+    <DaySelector />
     <pre>
       {{ data }}
     </pre>
