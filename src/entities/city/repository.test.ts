@@ -15,6 +15,7 @@ const API_CITY_MOCK: APICity = {
   name: 'testName',
   population: 100,
   timezone: 'testTimezone',
+  admin1: 'testAdmin1',
 }
 
 const API_CITY_RESPONSE_MOCK: APIResponse<APICity> = {
@@ -26,6 +27,8 @@ const CITY_MOCK: City = {
   name: 'testName',
   latitude: -1,
   longitude: -1,
+  country: 'testCountry',
+  admin1: 'testAdmin1',
 }
 
 const $mockedFetch = vi.hoisted(() => vi.fn())

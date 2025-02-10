@@ -8,7 +8,7 @@ export class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
 
 const parseApiResponse = (data: APIResponse<APICity>): City[] => {
   if (!data.results) return []
-  return data.results.map(({ id, name, latitude, longitude }) => ({ id, name, latitude, longitude }))
+  return data.results.map(({ id, name, latitude, longitude, country, admin1 }) => ({ id, name, latitude, longitude, country, admin1 }))
 }
 
 export const cityRepository = createRepository({
