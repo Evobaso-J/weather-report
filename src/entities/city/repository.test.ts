@@ -1,8 +1,7 @@
 import { afterEach, describe, vi, expectTypeOf, it, expect } from 'vitest'
-import type { APIResponse } from '../../helpers'
-import { GEOCODING_API_URL } from '../config'
 import { cityRepository, CityRepositoryError } from './repository'
-import type { APICity, City } from './types'
+import type { APICity, APICityResponse, City } from './types'
+import { GEOCODING_API_URL } from './constants'
 
 const API_CITY_MOCK: APICity = {
   country_code: 'TE',
@@ -19,7 +18,7 @@ const API_CITY_MOCK: APICity = {
   admin1: 'testAdmin1',
 }
 
-const API_CITY_RESPONSE_MOCK: APIResponse<APICity> = {
+const API_CITY_RESPONSE_MOCK: APICityResponse = {
   generationtime_ms: 0,
   results: [API_CITY_MOCK],
 }

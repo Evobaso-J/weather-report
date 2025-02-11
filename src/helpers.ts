@@ -28,8 +28,3 @@ export class BaseError<T extends string> extends Error {
 }
 
 export type MyResult<T> = Result<T, BaseError<string>>
-
-export type APIResponse<T> = {
-  generationtime_ms: number
-  results?: T[]
-}
