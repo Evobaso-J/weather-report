@@ -1,12 +1,11 @@
 import { createErr, createOk } from 'option-t/plain_result'
-import type { City, APICity } from './types'
-import { BaseError, type APIResponse } from '~/helpers'
-
-export const GEOCODING_API_URL = 'https://geocoding-api.open-meteo.com/v1/search'
+import type { APICityResponse, City } from './types'
+import { GEOCODING_API_URL } from './constants'
+import { BaseError } from '~/helpers'
 
 export class CityRepositoryError extends BaseError<'CITY_REPO_ERROR'> {}
 
-const parseApiResponse = (data: APIResponse<APICity>): City[] => {
+const parseApiResponse = (data: APICityResponse): City[] => {
   if (!data.results) return []
   return data.results.map(({ id, name, latitude, longitude, country, admin1 }) => ({ id, name, latitude, longitude, country, admin1 }))
 }
@@ -15,7 +14,7 @@ export const cityRepository = createRepository({
   query: async ({ name }: { name: string }) => {
     let result
     try {
-      const data = await $fetch<APIResponse<APICity>>(GEOCODING_API_URL, { query: { name } })
+      const data = await $fetch<APICityResponse>(GEOCODING_API_URL, { query: { name } })
       const cities = parseApiResponse(data)
       result = createOk(cities)
     }
