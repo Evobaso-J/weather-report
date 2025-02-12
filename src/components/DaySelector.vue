@@ -28,19 +28,20 @@
   </UTabs>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { TabItem } from '#ui/types'
+import { FORECAST_DAYS } from '~/entities/weather/constants'
 
 defineComponent({ name: 'DaySelector' })
 
-type DaySelectorEmits = {
-  (event: 'change', ISODate: string): void
-}
+  type DaySelectorEmits = {
+    (event: 'change', ISODate: string): void
+  }
 const emit = defineEmits<DaySelectorEmits>()
 
 const today = new Date()
 
-const items: TabItem[] = Array.from({ length: 15 }, (_, i) => {
+const items: TabItem[] = Array.from({ length: FORECAST_DAYS }, (_, i) => {
   const date = new Date(today)
   date.setHours(1, 0, 0, 0)
   date.setDate(today.getDate() + i)
