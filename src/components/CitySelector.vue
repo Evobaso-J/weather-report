@@ -1,6 +1,6 @@
 <template>
   <UInputMenu
-    v-model="selected"
+    :model-value="currentCity"
     :search="search"
     :loading="loading"
     :placeholder="$t('searchCity')"
@@ -15,6 +15,7 @@
     :ui-menu="{
       option: { container: 'flex items-center gap-1.5 min-w-0 w-full' },
     }"
+    @update:model-value="setCurrentCity"
   >
     <template #option="{ option }">
       <div
@@ -37,7 +38,6 @@ import { cityRepository } from '~/entities/city/repository'
 defineComponent({ name: 'CitySelector' })
 
 const loading = ref(false)
-const selected = ref()
 
 const toast = useToast()
 
@@ -63,4 +63,6 @@ const search = async (q: string) => {
 
   return unwrapOk(cities)
 }
+
+const { setCurrentCity, currentCity } = useCityStore()
 </script>
