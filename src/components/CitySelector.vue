@@ -52,7 +52,6 @@ const search = async (q: string) => {
   loading.value = false
 
   if (isErr(cities)) {
-    console.log('isERROR')
     toast.add({
       title: cities.err.message,
       color: 'red',
