@@ -11,7 +11,7 @@ const parseApiResponse = <N extends number>({ daily, daily_units }: APIWeatherRe
     minTemperature: { unit: daily_units.temperature_2m_min, value: daily.temperature_2m_min[index]! },
     precipitationSum: { unit: daily_units.precipitation_sum, value: daily.precipitation_sum[index]! },
     rainSum: { unit: daily_units.rain_sum, value: daily.rain_sum[index]! },
-    time: { unit: daily_units.time, value: daily.time[index]! },
+    time: new Date(daily.time[index]!),
   })) as Tuple<DailyWeather, N>
 }
 

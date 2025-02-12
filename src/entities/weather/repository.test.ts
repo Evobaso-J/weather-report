@@ -16,7 +16,7 @@ const API_WEATHER_RESPONSE_MOCK: APIWeatherResponse = {
     rain_sum: 'mm',
     temperature_2m_max: '°C',
     temperature_2m_min: '°C',
-    time: 'date',
+    time: 'iso8601',
   },
   elevation: 0,
   generationtime_ms: 0,
@@ -32,7 +32,7 @@ const DAILY_WEATHER_MOCK: DailyWeather = {
   minTemperature: { unit: '°C', value: 0 },
   precipitationSum: { unit: 'mm', value: 0 },
   rainSum: { unit: 'mm', value: 0 },
-  time: { unit: 'date', value: '2021-09-01' },
+  time: new Date('2021-09-01'),
 }
 
 const $mockedFetch = vi.hoisted(() => vi.fn())
