@@ -27,9 +27,11 @@ export class BaseError<T extends string> extends Error {
   }
 }
 
-export type MyResult<T> = Result<T, BaseError<string>>
+type TupleHelper<T, N extends number, U extends unknown[]> = U['length'] extends N ? U : TupleHelper<T, N, [T, ...U]>
+export type Tuple<T, N extends number> = N extends number ?
+  number extends N ?
+    T[]
+    : TupleHelper<T, N, []>
+  : never
 
-export type APIResponse<T> = {
-  generationtime_ms: number
-  results?: T[]
-}
+export type MyResult<T> = Result<T, BaseError<string>>

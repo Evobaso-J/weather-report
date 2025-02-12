@@ -21,3 +21,8 @@ export type City = {
   country: string
   admin1: string
 }
+
+export type APICityResponse = {
+  generationtime_ms: number
+  results?: APICity[]
+}
