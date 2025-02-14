@@ -4,19 +4,19 @@
       :days
       @change="setDate"
     />
-    <div>
-      CURRENT DATE {{ currentDate }}
-      <pre>{{ dailyWeather }}</pre>
-    </div>
+    <DailyWeatherTable
+      :daily-weather="dailyWeather"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import type { DailyWeather } from '~/entities/weather/types'
+import DailyWeatherTable from './DailyWeatherTable.vue'
+import type { HourlyWeather } from '~/entities/weather/types'
 
 defineComponent({ name: 'ForecastSection' })
 type ForecastSectionProps = {
-  weatherForecast: DailyWeather[]
+  weatherForecast: HourlyWeather[]
 }
 const props = defineProps<ForecastSectionProps>()
 
@@ -29,12 +29,13 @@ const setDate = (date: Date) => {
   currentDate.value = date
 }
 
-const days = computed<Date[]>(() => props.weatherForecast.map(forecast => forecast.time))
+const days = computed<Date[]>(() => {
+  const uniqueDates = new Set(props.weatherForecast.map(forecast => forecast.time.toDateString()))
+  return Array.from(uniqueDates).map(dateString => new Date(dateString))
+})
 
-const dailyWeather = computed<DailyWeather[]>(() =>
-  props.weatherForecast.filter(
-    forecast =>
-      forecast.time.toISOString() === currentDate.value?.toISOString(),
-  ),
+const dailyWeather = computed<HourlyWeather[]>(() => props.weatherForecast.filter(
+  forecast => forecast.time.toDateString() === currentDate.value?.toDateString(),
+),
 )
 </script>

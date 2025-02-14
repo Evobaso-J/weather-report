@@ -1,21 +1,19 @@
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
-import type { APIWeatherResponse, DailyWeather } from './types'
+import type { APIWeatherResponse, WeatherQueryParams } from './types'
 import { weatherRepository, WeatherRepositoryError } from './repository'
 import { FORECAST_API_URL } from './constants'
 
 const API_WEATHER_RESPONSE_MOCK: APIWeatherResponse = {
-  daily: {
-    precipitation_sum: [0],
-    rain_sum: [0],
-    temperature_2m_max: [0],
-    temperature_2m_min: [0],
+  hourly: {
+    precipitation_probability: [0],
+    rain: [0],
+    temperature_2m: [0],
     time: ['2021-09-01'],
   },
-  daily_units: {
-    precipitation_sum: 'mm',
-    rain_sum: 'mm',
-    temperature_2m_max: '°C',
-    temperature_2m_min: '°C',
+  hourly_units: {
+    precipitation_probability: '%',
+    rain: 'mm',
+    temperature_2m: '°C',
     time: 'iso8601',
   },
   elevation: 0,
@@ -27,11 +25,10 @@ const API_WEATHER_RESPONSE_MOCK: APIWeatherResponse = {
   utc_offset_seconds: 0,
 }
 
-const DAILY_WEATHER_MOCK: DailyWeather = {
-  maxTemperature: { unit: '°C', value: 0 },
-  minTemperature: { unit: '°C', value: 0 },
-  precipitationSum: { unit: 'mm', value: 0 },
-  rainSum: { unit: 'mm', value: 0 },
+const HOURLY_WEATHER_MOCK = {
+  temperature2m: { unit: '°C', value: 0 },
+  precipitationProbability: { unit: '%', value: 0 },
+  rain: { unit: 'mm', value: 0 },
   time: new Date('2021-09-01'),
 }
 
@@ -55,7 +52,8 @@ describe('weatherRepository', () => {
 
       weather.query({ latitude: 0, longitude: 0, forecast_days: 1 })
 
-      expect($fetch).toHaveBeenCalledWith(FORECAST_API_URL, { query: { latitude: 0, longitude: 0, daily: ['temperature_2m_min', 'temperature_2m_max', 'precipitation_sum', 'rain_sum'], forecast_days: 1 } })
+      const expectedWeatherQueryParams: WeatherQueryParams[] = ['temperature_2m', 'precipitation_probability', 'rain']
+      expect($fetch).toHaveBeenCalledWith(FORECAST_API_URL, { query: { latitude: 0, longitude: 0, hourly: expectedWeatherQueryParams, forecast_days: 1 } })
     })
     it('should return a list of daily weather wrapped in an Ok result if the request is successful', async () => {
       $mockedFetch.mockResolvedValueOnce(API_WEATHER_RESPONSE_MOCK)
@@ -63,7 +61,7 @@ describe('weatherRepository', () => {
 
       const result = await weather.query({ latitude: 0, longitude: 0, forecast_days: 1 })
 
-      expect(result).toStrictEqual({ ok: true, val: [DAILY_WEATHER_MOCK], err: null })
+      expect(result).toStrictEqual({ ok: true, val: [HOURLY_WEATHER_MOCK], err: null })
     })
     it('should return an error wrapped in an Err result if the request fails', async () => {
       $mockedFetch.mockRejectedValueOnce(new Error('testError'))
