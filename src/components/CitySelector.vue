@@ -32,36 +32,24 @@
 </template>
 
 <script setup lang='ts'>
-import { unwrapOk, isErr } from 'option-t/plain_result'
 import { cityRepository } from '~/entities/city/repository'
 
 defineComponent({ name: 'CitySelector' })
 
 const loading = ref(false)
 
-const toast = useToast()
+const { unwrapResult } = useUnwrapResult()
 
 const cityRepo = cityRepository()
 const search = async (q: string) => {
   if (!q.length) return []
 
   loading.value = true
-
   const cities = await cityRepo.query({ name: q })
 
   loading.value = false
 
-  if (isErr(cities)) {
-    toast.add({
-      title: cities.err.message,
-      color: 'red',
-      timeout: 3000,
-      icon: 'i-mdi-alert-outline',
-    })
-    return []
-  }
-
-  return unwrapOk(cities)
+  return unwrapResult(cities)
 }
 
 const { setCurrentCity, currentCity } = useCityStore()
