@@ -59,6 +59,8 @@ const emitDate = (index: number) => {
 }
 
 onMounted(() => {
-  emit('change', items.value[0]!.value)
+  if (items.value[0]) {
+    emit('change', items.value[0].value)
+  }
 })
 </script>
