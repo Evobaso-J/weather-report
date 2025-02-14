@@ -3,6 +3,9 @@
     "name": "Weather Report",
     "titleTemplate": "%s • @:app.name"
   },
+  "error": {
+    "noElementFound": "No element found"
+  },
   "home": "Home",
   "searchCity": "Search for a city..."
 }
