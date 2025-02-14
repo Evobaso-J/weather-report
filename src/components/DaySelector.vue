@@ -38,7 +38,7 @@ type DaySelectorEmits = {
 }
 const emit = defineEmits<DaySelectorEmits>()
 
-type DaySelectorProps = {
+export type DaySelectorProps = {
   days: Date[]
 }
 const props = defineProps<DaySelectorProps>()
