@@ -4,8 +4,10 @@
     "titleTemplate": "%s • @:app.name"
   },
   "error": {
+    "dataFetchingError": "Error fetching data",
     "noElementFound": "No element found"
   },
   "home": "Home",
+  "loading": "Loading...",
   "searchCity": "Search for a city..."
 }
