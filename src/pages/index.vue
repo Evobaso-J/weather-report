@@ -1,17 +1,19 @@
 <template>
-  <div class="flex gap-10">
-    <DaySelector @change="setDate" />
-    <div>
-      CURRENT DATE{{ currentDate }}
-      <pre>
-        {{ data }}
-      </pre>
-    </div>
-  </div>
+  <UCard class="w-full">
+    <ForecastSection
+      v-if="dataStatus === 'success'"
+      :weather-forecast="weatherForecast ?? []"
+    />
+    <DataAlternateStatus
+      v-else
+      :status="dataStatus"
+    />
+  </UCard>
 </template>
 
 <script setup lang="ts">
-import { cityRepository } from '~/entities/city/repository'
+import { FORECAST_DAYS } from '~/entities/weather/constants'
+import { weatherRepository } from '~/entities/weather/repository'
 
 const { t } = useI18n()
 
@@ -19,11 +21,26 @@ useHead({
   title: t('home'),
 })
 
-const cityRepo = cityRepository()
-const { data } = await useAsyncData(() => cityRepo.query({ name: 'milano' }))
+const { currentCity } = useCityStore()
 
-const currentDate = ref<string>()
-const setDate = (ISODate: string) => {
-  currentDate.value = ISODate
-}
+const { unwrapResult } = useUnwrapResult()
+
+const weatherRepo = weatherRepository()
+const { data: weatherForecast, status } = useAsyncData(() => weatherRepo.query({
+  latitude: currentCity.value?.latitude ?? 0,
+  longitude: currentCity.value?.longitude ?? 0,
+  forecast_days: FORECAST_DAYS,
+}), {
+  transform: unwrapResult,
+  watch: [currentCity],
+})
+
+export type DataStatus = 'loading' | 'error' | 'empty' | 'success'
+
+const dataStatus = computed<DataStatus>(() => {
+  if (status.value === 'pending') return 'loading'
+  if (status.value === 'error') return 'error'
+  if (status.value === 'success' && !weatherForecast.value?.length) return 'empty'
+  return 'success'
+})
 </script>

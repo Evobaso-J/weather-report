@@ -35,3 +35,5 @@ export type Tuple<T, N extends number> = N extends number ?
   : never
 
 export type MyResult<T> = Result<T, BaseError<string>>
+
+export type SnakeToCamel<S extends string> = S extends `${infer F}_${infer R}` ? `${Lowercase<F>}${Capitalize<SnakeToCamel<R>>}` : S

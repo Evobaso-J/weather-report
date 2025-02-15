@@ -3,6 +3,19 @@
     "name": "Weather Report",
     "titleTemplate": "%s • @:app.name"
   },
+  "entities": {
+    "weather": {
+      "cloudCover": "Cloud Cover",
+      "precipitationProbability": "Precipitation Probability",
+      "rain": "Rain",
+      "temperature": "Temperature"
+    }
+  },
+  "error": {
+    "dataFetchingError": "Error fetching data",
+    "noElementFound": "No element found"
+  },
   "home": "Home",
+  "loading": "Loading...",
   "searchCity": "Search for a city..."
 }
