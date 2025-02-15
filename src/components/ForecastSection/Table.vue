@@ -5,12 +5,38 @@
     :ui="{
       wrapper: 'grow p-1 pt-[1px] pb-2',
       divide: 'divide-y divide-gray-300',
-      thead: 'sticky top-0 rounded-md ring-1 ring-gray-200 bg-white',
+      thead: 'sticky top-0 rounded-md ring-1 ring-gray-200 bg-white z-10',
       th: {
         base: 'text-left rtl:text-right rounded-md',
       },
     }"
-  />
+  >
+    <template #time-data="{ row }">
+      <div class="flex items-center gap-2">
+        <span>
+          {{ new Date(row.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) }}
+        </span>
+        <ForecastSectionCloudCoverIcon
+          :cloud-cover-percentage="row.cloudCover.value"
+          :rain="row.rain.value"
+          :temperature="row.temperature2m.value"
+        />
+      </div>
+    </template>
+    <template #rain-data="{ row }">
+      {{ parseVariableToStringWithUnit(row.rain) }}
+    </template>
+    <template #temperature2m-data="{ row }">
+      {{ parseVariableToStringWithUnit(row.temperature2m) }}
+    </template>
+    <template #precipitationProbability-data="{ row }">
+      {{ parseVariableToStringWithUnit(row.precipitationProbability) }}
+    </template>
+
+    <template #cloudCover-data="{ row }">
+      {{ parseVariableToStringWithUnit(row.cloudCover) }}
+    </template>
+  </UTable>
 </template>
 
 <script setup lang='ts'>
@@ -30,18 +56,9 @@ const filterPastHours = (weather: HourlyWeather) => {
   return weather.time >= new Date()
 }
 
-type HourlyWeatherRow = {
-  [key in keyof HourlyWeather]: string
-}
-const rows = computed<HourlyWeatherRow[]>(() => props.dailyWeather
-  .filter(filterPastHours)
-  .map(weather => ({
-    time: new Date(weather.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    rain: parseVariableToStringWithUnit(weather.rain),
-    temperature2m: parseVariableToStringWithUnit(weather.temperature2m),
-    precipitationProbability: parseVariableToStringWithUnit(weather.precipitationProbability),
-    cloudCover: parseVariableToStringWithUnit(weather.cloudCover),
-  })))
+const rows = computed<HourlyWeather[]>(() => props.dailyWeather
+  .filter(filterPastHours),
+)
 
 type HourlyWeatherColumn = {
   key: keyof HourlyWeather
