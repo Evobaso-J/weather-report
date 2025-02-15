@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getTimeSpans } from './utils'
 
-const fakeSystemTime = new Date('2021-09-09T00:00:00Z')
+const fakeSystemTime = new Date('2021-09-09')
 
 describe('weatherHistory utils', () => {
   beforeEach(() => {
