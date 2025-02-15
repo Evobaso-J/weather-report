@@ -28,35 +28,39 @@
   </UTabs>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { TabItem } from '#ui/types'
 
 defineComponent({ name: 'DaySelector' })
 
 type DaySelectorEmits = {
-  (event: 'change', ISODate: string): void
+  (event: 'change', date: Date): void
 }
 const emit = defineEmits<DaySelectorEmits>()
 
-const today = new Date()
+export type DaySelectorProps = {
+  days: Date[]
+}
+const props = defineProps<DaySelectorProps>()
 
-const items: TabItem[] = Array.from({ length: 15 }, (_, i) => {
-  const date = new Date(today)
-  date.setHours(1, 0, 0, 0)
-  date.setDate(today.getDate() + i)
-
-  return {
-    label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    value: date.toISOString(),
-    icon: 'i-heroicons-calendar',
-  }
+type DaySelectorTabItem = TabItem & { value: Date }
+const items = computed<DaySelectorTabItem[]>(() => {
+  return props.days.map((date) => {
+    return {
+      label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      value: date,
+      icon: 'i-heroicons-calendar',
+    }
+  })
 })
 
 const emitDate = (index: number) => {
-  emit('change', items[index]!.value)
+  emit('change', items.value[index]!.value)
 }
 
 onMounted(() => {
-  emit('change', items[0]!.value)
+  if (items.value[0]) {
+    emit('change', items.value[0].value)
+  }
 })
 </script>

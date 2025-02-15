@@ -1,18 +1,18 @@
 import { createErr, createOk } from 'option-t/plain_result'
-import type { APIWeatherResponse, DailyWeather } from './types'
-import { FORECAST_API_URL } from './constants'
+import type { APIWeatherResponse, HourlyWeather } from './types'
+import { FORECAST_API_URL, WEATHER_QUERY_PARAMS } from './constants'
 import { BaseError, type Tuple } from '~/helpers'
 
 export class WeatherRepositoryError extends BaseError<'WEATHER_REPO_ERROR'> {}
 
-const parseApiResponse = <N extends number>({ daily, daily_units }: APIWeatherResponse<N>): Tuple<DailyWeather, N> => {
-  return Array.from({ length: daily.time.length }).map<DailyWeather>((_, index) => ({
-    maxTemperature: { unit: daily_units.temperature_2m_max, value: daily.temperature_2m_max[index]! },
-    minTemperature: { unit: daily_units.temperature_2m_min, value: daily.temperature_2m_min[index]! },
-    precipitationSum: { unit: daily_units.precipitation_sum, value: daily.precipitation_sum[index]! },
-    rainSum: { unit: daily_units.rain_sum, value: daily.rain_sum[index]! },
-    time: { unit: daily_units.time, value: daily.time[index]! },
-  })) as Tuple<DailyWeather, N>
+const parseApiResponse = <N extends number>({ hourly, hourly_units }: APIWeatherResponse<N>): Tuple<HourlyWeather, N> => {
+  return Array.from({ length: hourly.time.length }).map<HourlyWeather>((_, index) => ({
+    temperature2m: { unit: hourly_units.temperature_2m, value: hourly.temperature_2m[index]! },
+    precipitationProbability: { unit: hourly_units.precipitation_probability, value: hourly.temperature_2m[index]! },
+    rain: { unit: hourly_units.rain, value: hourly.rain[index]! },
+    cloudCover: { unit: hourly_units.cloud_cover, value: hourly.cloud_cover[index]! },
+    time: new Date(hourly.time[index]!),
+  })) as Tuple<HourlyWeather, N>
 }
 
 export const weatherRepository = createRepository({
@@ -22,7 +22,7 @@ export const weatherRepository = createRepository({
       const data = await $fetch<APIWeatherResponse>(FORECAST_API_URL,
         { query: {
           ...query,
-          daily: ['temperature_2m_min', 'temperature_2m_max', 'precipitation_sum', 'rain_sum'],
+          hourly: WEATHER_QUERY_PARAMS,
         } })
       const weather = parseApiResponse(data)
       result = createOk(weather)

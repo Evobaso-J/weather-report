@@ -1,6 +1,19 @@
-import type { Tuple } from '~/helpers'
+import type { WEATHER_QUERY_PARAMS } from './constants'
+import type { SnakeToCamel, Tuple } from '~/helpers'
 
-type Date = string
+export type WeatherQueryParams = typeof WEATHER_QUERY_PARAMS[number]
+
+type Hourly<N extends number = number> = {
+  [key in WeatherQueryParams]: Tuple<number, N>
+} & {
+  time: Tuple<string, N>
+}
+
+type HourlyUnits = {
+  [key in WeatherQueryParams]: string
+} & {
+  time: string
+}
 
 export type APIWeatherResponse<N extends number = number> = {
   latitude: number
@@ -10,31 +23,17 @@ export type APIWeatherResponse<N extends number = number> = {
   timezone: string
   timezone_abbreviation: string
   elevation: number
-  daily_units: {
-    time: string
-    temperature_2m_min: string
-    temperature_2m_max: string
-    precipitation_sum: string
-    rain_sum: string
-  }
-  daily: {
-    time: Tuple<Date, N>
-    temperature_2m_min: Tuple<number, N>
-    temperature_2m_max: Tuple<number, N>
-    precipitation_sum: Tuple<number, N>
-    rain_sum: Tuple<number, N>
-  }
+  hourly: Hourly<N>
+  hourly_units: HourlyUnits
 }
 
-type WeatherVariable<T> = {
+export type WeatherVariable<T> = {
   unit: string
   value: T
 }
 
-export type DailyWeather = {
-  time: WeatherVariable<Date>
-  minTemperature: WeatherVariable<number>
-  maxTemperature: WeatherVariable<number>
-  precipitationSum: WeatherVariable<number>
-  rainSum: WeatherVariable<number>
+export type HourlyWeather = {
+  time: Date
+} & {
+  [key in SnakeToCamel<WeatherQueryParams>]: WeatherVariable<number>
 }
