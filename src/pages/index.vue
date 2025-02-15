@@ -23,6 +23,9 @@
         v-if="dataStatus !== 'success'"
         :status="dataStatus"
       />
+      <pre v-else-if="activeTab.key === 'history'">
+        {{ weatherHistory }}
+      </pre>
       <ForecastSection
         v-else-if="activeTab.key === 'forecast'"
         :weather-forecast="weatherForecast ?? []"
@@ -58,7 +61,7 @@ const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncDat
   watch: [currentCity],
 })
 
-const { status: weatherHistoryCallStatus } = useAsyncData(() => weatherRepo.query({
+const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherRepo.query({
   latitude: currentCity.value?.latitude ?? 0,
   longitude: currentCity.value?.longitude ?? 0,
   forecast_days: FORECAST_DAYS,
