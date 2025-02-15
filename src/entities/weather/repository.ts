@@ -10,6 +10,7 @@ const parseApiResponse = <N extends number>({ hourly, hourly_units }: APIWeather
     temperature2m: { unit: hourly_units.temperature_2m, value: hourly.temperature_2m[index]! },
     precipitationProbability: { unit: hourly_units.precipitation_probability, value: hourly.temperature_2m[index]! },
     rain: { unit: hourly_units.rain, value: hourly.rain[index]! },
+    cloudCover: { unit: hourly_units.cloud_cover, value: hourly.cloud_cover[index]! },
     time: new Date(hourly.time[index]!),
   })) as Tuple<HourlyWeather, N>
 }
