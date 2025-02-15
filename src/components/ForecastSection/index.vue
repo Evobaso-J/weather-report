@@ -5,6 +5,7 @@
       @change="setDate"
     />
     <ForecastSectionTable
+      class="pr-4"
       :daily-weather="dailyWeather"
     />
   </section>

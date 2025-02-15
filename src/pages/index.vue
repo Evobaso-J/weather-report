@@ -35,6 +35,7 @@
 import { FORECAST_DAYS } from '~/entities/weather/constants'
 import { weatherRepository } from '~/entities/weather/repository'
 import type { TabItem } from '#ui/types'
+import type { AsyncDataRequestStatus } from '#app'
 
 const { t } = useI18n()
 
@@ -45,6 +46,26 @@ useHead({
 const { currentCity } = useCityStore()
 
 const { unwrapResult } = useUnwrapResult()
+
+const weatherRepo = weatherRepository()
+
+const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncData(() => weatherRepo.query({
+  latitude: currentCity.value?.latitude ?? 0,
+  longitude: currentCity.value?.longitude ?? 0,
+  forecast_days: FORECAST_DAYS,
+}), {
+  transform: unwrapResult,
+  watch: [currentCity],
+})
+
+const { status: weatherHistoryCallStatus } = useAsyncData(() => weatherRepo.query({
+  latitude: currentCity.value?.latitude ?? 0,
+  longitude: currentCity.value?.longitude ?? 0,
+  forecast_days: FORECAST_DAYS,
+}), {
+  transform: unwrapResult,
+  watch: [currentCity],
+})
 
 const tabs = [{
   label: t('weatherForecast'),
@@ -65,22 +86,17 @@ const changeTab = (index: number) => {
   activeTab.value = newTab
 }
 
-const weatherRepo = weatherRepository()
-const { data: weatherForecast, status } = useAsyncData(() => weatherRepo.query({
-  latitude: currentCity.value?.latitude ?? 0,
-  longitude: currentCity.value?.longitude ?? 0,
-  forecast_days: FORECAST_DAYS,
-}), {
-  transform: unwrapResult,
-  watch: [currentCity],
-})
-
 export type DataStatus = 'loading' | 'error' | 'empty' | 'success'
-
 const dataStatus = computed<DataStatus>(() => {
-  if (status.value === 'pending') return 'loading'
-  if (status.value === 'error') return 'error'
-  if (status.value === 'success' && !weatherForecast.value?.length) return 'empty'
+  const callStatusMap = {
+    forecast: weatherForecastCallStatus.value,
+    history: weatherHistoryCallStatus.value,
+  } as const satisfies Record<(typeof tabs)[number]['key'], AsyncDataRequestStatus>
+
+  const callStatus = callStatusMap[activeTab.value.key]
+  if (callStatus === 'pending') return 'loading'
+  if (callStatus === 'error') return 'error'
+  if (callStatus === 'success' && !weatherForecast.value?.length) return 'empty'
   return 'success'
 })
 </script>
