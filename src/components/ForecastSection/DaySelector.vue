@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import type { TabItem } from '#ui/types'
 
-defineComponent({ name: 'DaySelector' })
+defineComponent({ name: 'HistorySectionDaySelector' })
 
 type DaySelectorEmits = {
   (event: 'change', date: Date): void
@@ -49,7 +49,7 @@ const items = computed<DaySelectorTabItem[]>(() => {
     return {
       label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       value: date,
-      icon: 'i-heroicons-calendar',
+      icon: 'i-mdi-calendar',
     }
   })
 })

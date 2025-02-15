@@ -1,6 +1,6 @@
 <template>
   <section class="flex gap-10 w-full max-h-[35rem]">
-    <DaySelector
+    <ForecastSectionDaySelector
       :days
       @change="setDate"
     />
