@@ -3,6 +3,15 @@
     "name": "Weather Report",
     "titleTemplate": "%s • @:app.name"
   },
+  "entites": {
+    "weatherHistory": {
+      "timeSpan": {
+        "monthly": "Monthly",
+        "weekly": "Weekly",
+        "yearly": "Yearly"
+      }
+    }
+  },
   "entities": {
     "city": {
       "errors": {

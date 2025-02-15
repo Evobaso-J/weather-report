@@ -27,6 +27,7 @@
       <HistorySection
         v-if="activeTab.key === 'history'"
         :weather-history="weatherHistory ?? []"
+        :fetching-status="fetchingStatus"
         @change-timespan="(val) => { currentTimeSpan = val }"
       />
     </UCard>
