@@ -17,5 +17,7 @@
   },
   "home": "Home",
   "loading": "Loading...",
-  "searchCity": "Search for a city..."
+  "searchCity": "Search for a city...",
+  "weatherForecast": "Weather Forecast",
+  "weatherHistory": "History"
 }
