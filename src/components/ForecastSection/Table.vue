@@ -22,30 +22,6 @@ type DailyWeatherProps = {
 }
 const props = defineProps<DailyWeatherProps>()
 
-type WeatherColumns = {
-  key: keyof HourlyWeather
-  label?: string
-}
-
-const columns: WeatherColumns[] = [
-  {
-    key: 'time',
-    // label: 'Hour',
-  },
-  {
-    key: 'temperature2m',
-    label: 'Temperature',
-  },
-  {
-    key: 'rain',
-    label: 'Rain',
-  },
-  {
-    key: 'precipitationProbability',
-    label: 'Precipitation Probability',
-  },
-]
-
 const parseVariableToStringWithUnit = (variable: WeatherVariable<unknown>) => {
   return `${variable.value}${variable.unit}`
 }
@@ -54,12 +30,44 @@ const filterPastHours = (weather: HourlyWeather) => {
   return weather.time >= new Date()
 }
 
-const rows = computed(() => props.dailyWeather
+type HourlyWeatherRow = {
+  [key in keyof HourlyWeather]: string
+}
+const rows = computed<HourlyWeatherRow[]>(() => props.dailyWeather
   .filter(filterPastHours)
   .map(weather => ({
     time: new Date(weather.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
     rain: parseVariableToStringWithUnit(weather.rain),
     temperature2m: parseVariableToStringWithUnit(weather.temperature2m),
     precipitationProbability: parseVariableToStringWithUnit(weather.precipitationProbability),
+    cloudCover: parseVariableToStringWithUnit(weather.cloudCover),
   })))
+
+type HourlyWeatherColumn = {
+  key: keyof HourlyWeather
+  label?: string
+}
+
+const { t } = useI18n()
+const columns: HourlyWeatherColumn[] = [
+  {
+    key: 'time',
+  },
+  {
+    key: 'cloudCover',
+    label: t('entities.weather.cloudCover'),
+  },
+  {
+    key: 'temperature2m',
+    label: t('entities.weather.temperature'),
+  },
+  {
+    key: 'rain',
+    label: t('entities.weather.rain'),
+  },
+  {
+    key: 'precipitationProbability',
+    label: t('entities.weather.precipitationProbability'),
+  },
+]
 </script>
