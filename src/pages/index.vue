@@ -32,10 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import { FORECAST_DAYS } from '~/entities/weather/constants'
-import { weatherRepository } from '~/entities/weather/repository'
 import type { TabItem } from '#ui/types'
 import type { AsyncDataRequestStatus } from '#app'
+import { FORECAST_DAYS } from '~/entities/weatherForecast/constants'
+import { weatherForecastRepository } from '~/entities/weatherForecast/repository'
 
 const { t } = useI18n()
 
@@ -47,7 +47,7 @@ const { currentCity } = useCityStore()
 
 const { unwrapResult } = useUnwrapResult()
 
-const weatherRepo = weatherRepository()
+const weatherRepo = weatherForecastRepository()
 
 const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncData(() => weatherRepo.query({
   latitude: currentCity.value?.latitude ?? 0,
