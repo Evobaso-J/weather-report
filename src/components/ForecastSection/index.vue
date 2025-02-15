@@ -5,13 +5,14 @@
       @change="setDate"
     />
     <ForecastSectionTable
+      class="pr-4"
       :daily-weather="dailyWeather"
     />
   </section>
 </template>
 
 <script setup lang="ts">
-import type { HourlyWeather } from '~/entities/weather/types'
+import type { HourlyWeather } from '~/entities/weatherForecast/types'
 
 defineComponent({ name: 'ForecastSection' })
 type ForecastSectionProps = {

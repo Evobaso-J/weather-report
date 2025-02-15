@@ -24,7 +24,7 @@ export const cityRepository = createRepository({
       }
       result = createErr(new CityRepositoryError({
         name: 'CITY_REPO_ERROR',
-        message: 'Failed to fetch city data',
+        message: 'entities.city.errors.failedToFetchCityData',
       }))
     }
     return result

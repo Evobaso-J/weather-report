@@ -16,13 +16,13 @@
       <UIcon
         :name="item.icon"
         class="w-4 h-4 flex-shrink-0 me-2"
-        :class="[selected && 'text-primary-500 dark:text-primary-400']"
+        :class="[selected && 'text-primary-500']"
       />
     </template>
     <template #default="{ item, selected }">
       <span
         class="truncate"
-        :class="[selected && 'text-primary-500 dark:text-primary-400']"
+        :class="[selected && 'text-primary-500']"
       >{{ item.label }}</span>
     </template>
   </UTabs>
