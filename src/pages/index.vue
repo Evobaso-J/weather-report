@@ -19,16 +19,15 @@
       </template>
     </UTabs>
     <UCard class="w-full">
-      <DataAlternateStatus
-        v-if="dataStatus !== 'success'"
-        :status="dataStatus"
-      />
-      <pre v-else-if="activeTab.key === 'history'">
-        {{ weatherHistory }}
-      </pre>
       <ForecastSection
-        v-else-if="activeTab.key === 'forecast'"
+        v-if="activeTab.key === 'forecast'"
         :weather-forecast="weatherForecast ?? []"
+        :fetching-status="fetchingStatus"
+      />
+      <HistorySection
+        v-if="activeTab.key === 'history'"
+        :weather-history="weatherHistory ?? []"
+        @change-timespan="(val) => { currentTimeSpan = val }"
       />
     </UCard>
   </section>
@@ -40,6 +39,7 @@ import type { AsyncDataRequestStatus } from '#app'
 import { FORECAST_DAYS } from '~/entities/weatherForecast/constants'
 import { weatherForecastRepository } from '~/entities/weatherForecast/repository'
 import { weatherHistoryRepository } from '~/entities/weatherHistory/repository'
+import type { TimeSpan } from '~/entities/weatherHistory/utils'
 
 const { t } = useI18n()
 
@@ -62,13 +62,14 @@ const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncDat
 })
 
 const weatherHistoryRepo = weatherHistoryRepository()
+const currentTimeSpan = ref<TimeSpan>('weekly')
 const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherHistoryRepo.query({
   latitude: currentCity.value?.latitude ?? 90,
   longitude: currentCity.value?.longitude ?? 90,
-  timeSpan: 'yearly',
+  timeSpan: currentTimeSpan.value,
 }), {
   transform: unwrapResult,
-  watch: [currentCity],
+  watch: [currentCity, currentTimeSpan],
 })
 
 const tabs = [{
@@ -90,8 +91,8 @@ const changeTab = (index: number) => {
   activeTab.value = newTab
 }
 
-export type DataStatus = 'loading' | 'error' | 'empty' | 'success'
-const dataStatus = computed<DataStatus>(() => {
+export type FetchingStatus = 'loading' | 'error' | 'empty' | 'success'
+const fetchingStatus = computed<FetchingStatus>(() => {
   const callStatusMap = {
     forecast: weatherForecastCallStatus.value,
     history: weatherHistoryCallStatus.value,
