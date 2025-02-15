@@ -4,11 +4,24 @@
     "titleTemplate": "%s • @:app.name"
   },
   "entities": {
-    "weather": {
+    "city": {
+      "errors": {
+        "failedToFetchCityData": "Failed to fetch city data"
+      }
+    },
+    "weatherForecast": {
       "cloudCover": "Cloud Cover",
+      "errors": {
+        "failedToFetchWeatherforecastData": "Failed to fetch weather forecast data"
+      },
       "precipitationProbability": "Precipitation Probability",
       "rain": "Rain",
       "temperature": "Temperature"
+    },
+    "weatherHistory": {
+      "errors": {
+        "failedToFetchWeatherHistoryData": "Failed to fetch weather history data"
+      }
     }
   },
   "error": {

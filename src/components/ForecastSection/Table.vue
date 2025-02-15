@@ -73,19 +73,19 @@ const columns: HourlyWeatherColumn[] = [
   },
   {
     key: 'cloudCover',
-    label: t('entities.weather.cloudCover'),
+    label: t('entities.weatherForecast.cloudCover'),
   },
   {
     key: 'temperature2m',
-    label: t('entities.weather.temperature'),
+    label: t('entities.weatherForecast.temperature'),
   },
   {
     key: 'rain',
-    label: t('entities.weather.rain'),
+    label: t('entities.weatherForecast.rain'),
   },
   {
     key: 'precipitationProbability',
-    label: t('entities.weather.precipitationProbability'),
+    label: t('entities.weatherForecast.precipitationProbability'),
   },
 ]
 </script>

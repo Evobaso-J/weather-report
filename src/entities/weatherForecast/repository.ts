@@ -3,7 +3,7 @@ import type { APIWeatherForecastResponse, HourlyWeather } from './types'
 import { FORECAST_API_URL, WEATHER_FORECAST_QUERY_PARAMS } from './constants'
 import { BaseError, type Tuple } from '~/helpers'
 
-export class WeatherForecastRepositoryError extends BaseError<'WEATHER_REPO_ERROR'> {}
+export class WeatherForecastRepositoryError extends BaseError<'WEATHER_FORECAST_REPO_ERROR'> {}
 
 const parseApiResponse = <N extends number>({ hourly, hourly_units }: APIWeatherForecastResponse<N>): Tuple<HourlyWeather, N> => {
   return Array.from({ length: hourly.time.length }).map<HourlyWeather>((_, index) => ({
@@ -32,8 +32,8 @@ export const weatherForecastRepository = createRepository({
         result = createErr(new BaseError(error))
       }
       result = createErr(new WeatherForecastRepositoryError({
-        name: 'WEATHER_REPO_ERROR',
-        message: 'Failed to fetch weather data',
+        name: 'WEATHER_FORECAST_REPO_ERROR',
+        message: 'entities.weatherForecast.errors.failedToFetchWeatherforecastData',
       }))
     }
     return result

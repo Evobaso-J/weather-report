@@ -37,7 +37,7 @@ export const weatherHistoryRepository = createRepository({
       }
       result = createErr(new WeatherHistoryRepositoryError({
         name: 'WEATHER_HISTORY_REPO_ERROR',
-        message: 'Failed to fetch weather history data',
+        message: 'entities.weatherHistory.errors.failedToFetchWeatherHistoryData',
       }))
     }
     return result
