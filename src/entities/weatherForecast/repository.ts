@@ -1,11 +1,11 @@
 import { createErr, createOk } from 'option-t/plain_result'
-import type { APIWeatherResponse, HourlyWeather } from './types'
+import type { APIWeatherForecastResponse, HourlyWeather } from './types'
 import { FORECAST_API_URL, WEATHER_FORECAST_QUERY_PARAMS } from './constants'
 import { BaseError, type Tuple } from '~/helpers'
 
 export class WeatherForecastRepositoryError extends BaseError<'WEATHER_REPO_ERROR'> {}
 
-const parseApiResponse = <N extends number>({ hourly, hourly_units }: APIWeatherResponse<N>): Tuple<HourlyWeather, N> => {
+const parseApiResponse = <N extends number>({ hourly, hourly_units }: APIWeatherForecastResponse<N>): Tuple<HourlyWeather, N> => {
   return Array.from({ length: hourly.time.length }).map<HourlyWeather>((_, index) => ({
     temperature2m: { unit: hourly_units.temperature_2m, value: hourly.temperature_2m[index]! },
     precipitationProbability: { unit: hourly_units.precipitation_probability, value: hourly.temperature_2m[index]! },
@@ -19,7 +19,7 @@ export const weatherForecastRepository = createRepository({
   query: async (query: { latitude: number, longitude: number, forecast_days: number }) => {
     let result
     try {
-      const data = await $fetch<APIWeatherResponse>(FORECAST_API_URL,
+      const data = await $fetch<APIWeatherForecastResponse>(FORECAST_API_URL,
         { query: {
           ...query,
           hourly: WEATHER_FORECAST_QUERY_PARAMS,

@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
-import type { APIWeatherResponse, WeatherForecastQueryParams } from './types'
+import type { APIWeatherForecastResponse, WeatherForecastQueryParams } from './types'
 import { weatherForecastRepository, WeatherForecastRepositoryError } from './repository'
 import { FORECAST_API_URL } from './constants'
 
-const API_WEATHER_RESPONSE_MOCK: APIWeatherResponse = {
+const API_WEATHER_RESPONSE_MOCK: APIWeatherForecastResponse = {
   hourly: {
     precipitation_probability: [0],
     rain: [0],
@@ -58,7 +58,7 @@ describe('weatherForecastRepository', () => {
       const expectedWeatherQueryParams: WeatherForecastQueryParams[] = ['temperature_2m', 'precipitation_probability', 'rain', 'cloud_cover']
       expect($fetch).toHaveBeenCalledWith(FORECAST_API_URL, { query: { latitude: 0, longitude: 0, hourly: expectedWeatherQueryParams, forecast_days: 1 } })
     })
-    it('should return a list of daily weather wrapped in an Ok result if the request is successful', async () => {
+    it('should return a list of hourly weather data wrapped in an Ok result if the request is successful', async () => {
       $mockedFetch.mockResolvedValueOnce(API_WEATHER_RESPONSE_MOCK)
       const weather = weatherForecastRepository()
 

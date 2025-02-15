@@ -6,7 +6,7 @@ export type WeatherForecastQueryParams = typeof WEATHER_FORECAST_QUERY_PARAMS[nu
 type HourlyWeatherValues<N extends number> = PerTimeWeatherValues<WeatherForecastQueryParams, N>
 type HourlyWeatherUnits = PerTimeWeatherUnits<WeatherForecastQueryParams>
 
-export type APIWeatherResponse<N extends number = number> = {
+export type APIWeatherForecastResponse<N extends number = number> = {
   latitude: number
   longitude: number
   generationtime_ms: number

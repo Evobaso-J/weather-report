@@ -39,6 +39,7 @@ import type { TabItem } from '#ui/types'
 import type { AsyncDataRequestStatus } from '#app'
 import { FORECAST_DAYS } from '~/entities/weatherForecast/constants'
 import { weatherForecastRepository } from '~/entities/weatherForecast/repository'
+import { weatherHistoryRepository } from '~/entities/weatherHistory/repository'
 
 const { t } = useI18n()
 
@@ -50,9 +51,8 @@ const { currentCity } = useCityStore()
 
 const { unwrapResult } = useUnwrapResult()
 
-const weatherRepo = weatherForecastRepository()
-
-const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncData(() => weatherRepo.query({
+const weatherForecastRepo = weatherForecastRepository()
+const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncData(() => weatherForecastRepo.query({
   latitude: currentCity.value?.latitude ?? 0,
   longitude: currentCity.value?.longitude ?? 0,
   forecast_days: FORECAST_DAYS,
@@ -61,10 +61,11 @@ const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncDat
   watch: [currentCity],
 })
 
-const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherRepo.query({
-  latitude: currentCity.value?.latitude ?? 0,
-  longitude: currentCity.value?.longitude ?? 0,
-  forecast_days: FORECAST_DAYS,
+const weatherHistoryRepo = weatherHistoryRepository()
+const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherHistoryRepo.query({
+  latitude: currentCity.value?.latitude ?? 90,
+  longitude: currentCity.value?.longitude ?? 90,
+  timeSpan: 'yearly',
 }), {
   transform: unwrapResult,
   watch: [currentCity],
