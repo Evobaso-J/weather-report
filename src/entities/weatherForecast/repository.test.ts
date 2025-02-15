@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest'
-import type { APIWeatherResponse, WeatherQueryParams } from './types'
-import { weatherRepository, WeatherRepositoryError } from './repository'
+import type { APIWeatherForecastResponse, WeatherForecastQueryParams } from './types'
+import { weatherForecastRepository, WeatherForecastRepositoryError } from './repository'
 import { FORECAST_API_URL } from './constants'
 
-const API_WEATHER_RESPONSE_MOCK: APIWeatherResponse = {
+const API_WEATHER_RESPONSE_MOCK: APIWeatherForecastResponse = {
   hourly: {
     precipitation_probability: [0],
     rain: [0],
@@ -39,28 +39,28 @@ const $mockedFetch = vi.hoisted(() => vi.fn())
 
 vi.stubGlobal('$fetch', $mockedFetch)
 
-describe('weatherRepository', () => {
+describe('weatherForecastRepository', () => {
   afterEach(() => {
     vi.resetAllMocks()
   })
 
-  describe('weatherRepositoryQuery', () => {
+  describe('weatherForecastRepositoryQuery', () => {
     it('should require a latitude and longitude as param', () => {
-      const weather = weatherRepository()
+      const weather = weatherForecastRepository()
 
       expectTypeOf(weather.query).parameter(0).toMatchTypeOf<{ latitude: number, longitude: number }>()
     })
     it('should call fetch with the correct url and query params', () => {
-      const weather = weatherRepository()
+      const weather = weatherForecastRepository()
 
       weather.query({ latitude: 0, longitude: 0, forecast_days: 1 })
 
-      const expectedWeatherQueryParams: WeatherQueryParams[] = ['temperature_2m', 'precipitation_probability', 'rain', 'cloud_cover']
+      const expectedWeatherQueryParams: WeatherForecastQueryParams[] = ['temperature_2m', 'precipitation_probability', 'rain', 'cloud_cover']
       expect($fetch).toHaveBeenCalledWith(FORECAST_API_URL, { query: { latitude: 0, longitude: 0, hourly: expectedWeatherQueryParams, forecast_days: 1 } })
     })
-    it('should return a list of daily weather wrapped in an Ok result if the request is successful', async () => {
+    it('should return a list of hourly weather data wrapped in an Ok result if the request is successful', async () => {
       $mockedFetch.mockResolvedValueOnce(API_WEATHER_RESPONSE_MOCK)
-      const weather = weatherRepository()
+      const weather = weatherForecastRepository()
 
       const result = await weather.query({ latitude: 0, longitude: 0, forecast_days: 1 })
 
@@ -68,11 +68,11 @@ describe('weatherRepository', () => {
     })
     it('should return an error wrapped in an Err result if the request fails', async () => {
       $mockedFetch.mockRejectedValueOnce(new Error('testError'))
-      const weather = weatherRepository()
+      const weather = weatherForecastRepository()
 
       const result = await weather.query({ latitude: 0, longitude: 0, forecast_days: 1 })
 
-      expect(result).toMatchObject({ ok: false, val: null, err: expect.any(WeatherRepositoryError) })
+      expect(result).toMatchObject({ ok: false, val: null, err: expect.any(WeatherForecastRepositoryError) })
     })
   })
 })

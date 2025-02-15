@@ -23,7 +23,7 @@ export const useUnwrapResult = () => {
       return []
     }
     if (isErr(resultValue)) {
-      toast.add({ ...errorNotification, title: unwrapErr(resultValue).message })
+      toast.add({ ...errorNotification, title: t(unwrapErr(resultValue).message) })
       return []
     }
     return unwrapOk(resultValue)
