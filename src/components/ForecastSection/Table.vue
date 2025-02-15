@@ -2,13 +2,21 @@
   <UTable
     :columns
     :rows
+    :ui="{
+      wrapper: 'grow p-1 pt-[1px] pb-2',
+      divide: 'divide-y divide-gray-300',
+      thead: 'sticky top-0 rounded-md ring-1 ring-gray-200 bg-white',
+      th: {
+        base: 'text-left rtl:text-right rounded-md',
+      },
+    }"
   />
 </template>
 
 <script setup lang='ts'>
 import type { HourlyWeather, WeatherVariable } from '~/entities/weather/types'
 
-defineComponent({ name: 'DailyWeatherTable' })
+defineComponent({ name: 'ForecastSectionTable' })
 type DailyWeatherProps = {
   dailyWeather: HourlyWeather[]
 }
@@ -25,12 +33,12 @@ const columns: WeatherColumns[] = [
     // label: 'Hour',
   },
   {
-    key: 'rain',
-    label: 'Rain',
-  },
-  {
     key: 'temperature2m',
     label: 'Temperature',
+  },
+  {
+    key: 'rain',
+    label: 'Rain',
   },
   {
     key: 'precipitationProbability',
