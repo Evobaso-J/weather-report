@@ -25,15 +25,14 @@ const { currentCity } = useCityStore()
 
 const { unwrapResult } = useUnwrapResult()
 
-const weather = weatherRepository()
-const { data: weatherForecast, status } = useAsyncData(() => {
-  return weather.query({
-    latitude: currentCity.value?.latitude ?? 0,
-    longitude: currentCity.value?.longitude ?? 0,
-    forecast_days: FORECAST_DAYS,
-  })
-}, {
+const weatherRepo = weatherRepository()
+const { data: weatherForecast, status } = useAsyncData(() => weatherRepo.query({
+  latitude: currentCity.value?.latitude ?? 0,
+  longitude: currentCity.value?.longitude ?? 0,
+  forecast_days: FORECAST_DAYS,
+}), {
   transform: unwrapResult,
+  watch: [currentCity],
 })
 
 export type DataStatus = 'loading' | 'error' | 'empty' | 'success'
