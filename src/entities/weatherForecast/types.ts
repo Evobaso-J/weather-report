@@ -1,19 +1,10 @@
-import type { WEATHER_QUERY_PARAMS } from './constants'
-import type { SnakeToCamel, Tuple } from '~/helpers'
+import type { PerTimeWeather, PerTimeWeatherUnits, PerTimeWeatherValues } from '../weatherHelpers'
+import type { WEATHER_FORECAST_QUERY_PARAMS } from './constants'
 
-export type WeatherQueryParams = typeof WEATHER_QUERY_PARAMS[number]
+export type WeatherForecastQueryParams = typeof WEATHER_FORECAST_QUERY_PARAMS[number]
 
-type Hourly<N extends number = number> = {
-  [key in WeatherQueryParams]: Tuple<number, N>
-} & {
-  time: Tuple<string, N>
-}
-
-type HourlyUnits = {
-  [key in WeatherQueryParams]: string
-} & {
-  time: string
-}
+type HourlyWeatherValues<N extends number> = PerTimeWeatherValues<WeatherForecastQueryParams, N>
+type HourlyWeatherUnits = PerTimeWeatherUnits<WeatherForecastQueryParams>
 
 export type APIWeatherResponse<N extends number = number> = {
   latitude: number
@@ -23,17 +14,8 @@ export type APIWeatherResponse<N extends number = number> = {
   timezone: string
   timezone_abbreviation: string
   elevation: number
-  hourly: Hourly<N>
-  hourly_units: HourlyUnits
+  hourly: HourlyWeatherValues<N>
+  hourly_units: HourlyWeatherUnits
 }
 
-export type WeatherVariable<T> = {
-  unit: string
-  value: T
-}
-
-export type HourlyWeather = {
-  time: Date
-} & {
-  [key in SnakeToCamel<WeatherQueryParams>]: WeatherVariable<number>
-}
+export type HourlyWeather = PerTimeWeather<WeatherForecastQueryParams>

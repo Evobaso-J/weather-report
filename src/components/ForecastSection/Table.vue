@@ -40,7 +40,8 @@
 </template>
 
 <script setup lang='ts'>
-import type { HourlyWeather, WeatherVariable } from '~/entities/weatherForecast/types'
+import type { HourlyWeather } from '~/entities/weatherForecast/types'
+import type { WeatherVariable } from '~/entities/weatherHelpers'
 
 defineComponent({ name: 'ForecastSectionTable' })
 type DailyWeatherProps = {

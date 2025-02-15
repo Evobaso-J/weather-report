@@ -1,6 +1,6 @@
 import { createErr, createOk } from 'option-t/plain_result'
 import type { APIWeatherResponse, HourlyWeather } from './types'
-import { FORECAST_API_URL, WEATHER_QUERY_PARAMS } from './constants'
+import { FORECAST_API_URL, WEATHER_FORECAST_QUERY_PARAMS } from './constants'
 import { BaseError, type Tuple } from '~/helpers'
 
 export class WeatherForecastRepositoryError extends BaseError<'WEATHER_REPO_ERROR'> {}
@@ -22,7 +22,7 @@ export const weatherForecastRepository = createRepository({
       const data = await $fetch<APIWeatherResponse>(FORECAST_API_URL,
         { query: {
           ...query,
-          hourly: WEATHER_QUERY_PARAMS,
+          hourly: WEATHER_FORECAST_QUERY_PARAMS,
         } })
       const weather = parseApiResponse(data)
       result = createOk(weather)
