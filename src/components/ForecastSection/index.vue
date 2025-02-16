@@ -1,22 +1,33 @@
 <template>
-  <section class="flex gap-10 w-full max-h-[35rem]">
-    <DaySelector
-      :days
-      @change="setDate"
+  <div>
+    <DataAlternateStatus
+      v-if="fetchingStatus !== 'success'"
+      :status="fetchingStatus"
     />
-    <ForecastSectionTable
-      class="pr-4"
-      :daily-weather="dailyWeather"
-    />
-  </section>
+    <section
+      v-else
+      class="flex gap-10 w-full max-h-[35rem]"
+    >
+      <ForecastSectionDaySelector
+        :days
+        @change="setDate"
+      />
+      <ForecastSectionTable
+        class="pr-4"
+        :daily-weather="dailyWeather"
+      />
+    </section>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { HourlyWeather } from '~/entities/weatherForecast/types'
+import type { FetchingStatus } from '~/pages/index.vue'
 
 defineComponent({ name: 'ForecastSection' })
 type ForecastSectionProps = {
   weatherForecast: HourlyWeather[]
+  fetchingStatus: FetchingStatus
 }
 const props = defineProps<ForecastSectionProps>()
 

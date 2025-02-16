@@ -1,22 +1,19 @@
-const formatDate = (date: Date): string => {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+import { format, startOfToday, subDays, subMonths, subYears } from 'date-fns'
 
 export type StartEndDateQueryParams = { start_date: string, end_date: string }
-const formatPastTimeSpan = (dateNumber: number): StartEndDateQueryParams => {
-  const now = new Date(new Date().setHours(0, 0, 0, 0))
+
+const formatPastTimeSpan = (date: Date): StartEndDateQueryParams => {
+  const yesterday = subDays(startOfToday(), 1)
   return {
-    start_date: formatDate(new Date(dateNumber)),
-    end_date: formatDate(now),
+    start_date: format(date, 'yyyy-MM-dd'),
+    end_date: format(yesterday, 'yyyy-MM-dd'),
   }
 }
 
 export const getTimeSpans = () => ({
-  weekly: formatPastTimeSpan(new Date().setDate(new Date().getDate() - 7)),
-  monthly: formatPastTimeSpan(new Date().setMonth(new Date().getMonth() - 1)),
-  yearly: formatPastTimeSpan(new Date().setFullYear(new Date().getFullYear() - 1)),
+  weekly: formatPastTimeSpan(subDays(new Date(), 7)),
+  monthly: formatPastTimeSpan(subMonths(new Date(), 1)),
+  yearly: formatPastTimeSpan(subYears(new Date(), 1)),
 })
+
 export type TimeSpan = keyof ReturnType<typeof getTimeSpans>
