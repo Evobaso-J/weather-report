@@ -9,6 +9,8 @@ export const useChart = (chartConfig: {
   const toast = useToast()
   const { t } = useI18n()
   const id = useId()
+
+  const currentChart = ref<Chart>()
   watch(
     [chartRef, data],
     () => {
@@ -20,7 +22,10 @@ export const useChart = (chartConfig: {
         })
         return
       }
-      new Chart(chartRef.value, {
+      if (currentChart.value) {
+        currentChart.value.destroy()
+      }
+      currentChart.value = new Chart(chartRef.value, {
         type: type,
         data: data.value,
         options: {
