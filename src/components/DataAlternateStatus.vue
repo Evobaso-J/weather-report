@@ -44,12 +44,12 @@
 </template>
 
 <script setup lang='ts'>
-import type { DataStatus } from '~/pages/index.vue'
+import type { FetchingStatus } from '~/pages/index.vue'
 
 defineComponent({ name: 'DataTableAltStatus' })
 
    type DataTableAltStatusProps = {
-     status: Exclude<DataStatus, 'success'>
+     status: Exclude<FetchingStatus, 'success'>
    }
 
 defineProps<DataTableAltStatusProps>()

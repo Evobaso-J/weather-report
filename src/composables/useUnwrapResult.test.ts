@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { createErr } from 'option-t/plain_result'
 import { BaseError } from '../helpers'
@@ -21,6 +21,10 @@ mockNuxtImport('useI18n', () => useI18nMock)
 mockNuxtImport('useId', () => () => 'id')
 
 describe('useUnwrapResult', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('should return the correct value', () => {
     const composableReturnValue = useUnwrapResult()
 
