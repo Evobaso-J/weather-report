@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang='ts'>
-import { Chart } from 'chart.js/auto'
+import type { Chart } from 'chart.js/auto'
 import { format } from 'date-fns/format'
 import { parse } from 'date-fns/parse'
 import type { DailyWeather } from '~/entities/weatherHistory/types'
@@ -18,7 +18,6 @@ type RainChartProps = {
   timeSpan: TimeSpan
 }
 const props = defineProps<RainChartProps>()
-
 const rainChart = ref<HTMLCanvasElement>()
 
 const aggregateByMonth = (dailyWeather: DailyRainSum[]): DailyRainSum[] => {
@@ -44,14 +43,15 @@ const aggregateByMonth = (dailyWeather: DailyRainSum[]): DailyRainSum[] => {
   return Array.from(months.values())
 }
 
-type ChartData = Record<TimeSpan, Chart['data']>
-const chartDataPerTimeSpan = computed<ChartData[TimeSpan]>(() => {
+type ChartDataPerTimeSpan = Record<TimeSpan, Chart['data']>
+
+const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
   const label = `Rainfall ${(props.dailyWeather[0]?.rainSum.unit ?? '')}`
 
   const monthlyRainSum = aggregateByMonth(props.dailyWeather)
   const dailyRainValues = props.dailyWeather.map(dailyWeather => dailyWeather.rainSum.value)
 
-  const timeSpanMap: ChartData = {
+  const timeSpanMap: ChartDataPerTimeSpan = {
     weekly: {
       labels: props.dailyWeather.map(dailyWeather => format(dailyWeather.time, 'EEE d MMM')),
       datasets: [{
@@ -80,31 +80,5 @@ const chartDataPerTimeSpan = computed<ChartData[TimeSpan]>(() => {
   return timeSpanMap[props.timeSpan]
 })
 
-const toast = useToast()
-const { t } = useI18n()
-watch(
-  [rainChart, chartDataPerTimeSpan],
-  () => {
-    if (!rainChart.value) {
-      console.log(rainChart.value)
-      toast.add({
-        color: 'red',
-        title: t('error.chartNotLoaded'),
-      })
-      return
-    }
-
-    new Chart(rainChart.value, {
-      type: 'bar',
-      data: chartDataPerTimeSpan.value,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    })
-  },
-)
+useChart({ chartRef: rainChart, data: chartDataPerTimeSpan, type: 'bar' })
 </script>
