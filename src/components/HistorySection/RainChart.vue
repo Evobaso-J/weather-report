@@ -5,43 +5,18 @@
 <script setup lang='ts'>
 import type { Chart } from 'chart.js/auto'
 import { format } from 'date-fns/format'
-import { parse } from 'date-fns/parse'
+import { aggregateDailyWeatherByMonth } from './chartUtils'
 import type { DailyWeather } from '~/entities/weatherHistory/types'
 import type { TimeSpan } from '~/entities/weatherHistory/utils'
 
 defineComponent({ name: 'RainChart' })
 
-type DailyRainSum = Pick<DailyWeather, 'time' | 'rainSum'>
-
 type RainChartProps = {
-  dailyWeather: DailyRainSum[]
+  dailyWeather: DailyWeather[]
   timeSpan: TimeSpan
 }
 const props = defineProps<RainChartProps>()
 const rainChart = ref<HTMLCanvasElement>()
-
-const aggregateByMonth = (dailyWeather: DailyRainSum[]): DailyRainSum[] => {
-  const months = new Map<string, DailyRainSum>()
-
-  dailyWeather.forEach((dailyWeather) => {
-    const monthYear = format(new Date(dailyWeather.time), 'MMM yyyy')
-    if (!months.has(monthYear)) {
-      const monthDate = parse(monthYear, 'MMM yyyy', new Date())
-      months.set(monthYear, {
-        time: monthDate,
-        rainSum: { ...dailyWeather.rainSum },
-      })
-    }
-    else {
-      const existing = months.get(monthYear)
-      if (existing) {
-        existing.rainSum.value += dailyWeather.rainSum.value
-      }
-    }
-  })
-
-  return Array.from(months.values())
-}
 
 const { t } = useI18n()
 
@@ -49,7 +24,8 @@ type ChartDataPerTimeSpan = Record<TimeSpan, Chart['data']>
 const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
   const label = t('entities.weatherHistory.rainSum', { unit: props.dailyWeather[0]?.rainSum.unit })
 
-  const monthlyRainSum = aggregateByMonth(props.dailyWeather)
+  const sumRain = (num1: number, num2: number) => num1 + num2
+  const monthlyRainSum = aggregateDailyWeatherByMonth(props.dailyWeather, sumRain)
   const dailyRainValues = props.dailyWeather.map(dailyWeather => dailyWeather.rainSum.value)
 
   const timeSpanMap: ChartDataPerTimeSpan = {

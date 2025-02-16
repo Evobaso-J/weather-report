@@ -5,45 +5,18 @@
 <script setup lang='ts'>
 import type Chart from 'chart.js/auto'
 import { format } from 'date-fns/format'
-import { parse } from 'date-fns/parse'
+import { aggregateDailyWeatherByMonth } from './chartUtils'
 import type { DailyWeather } from '~/entities/weatherHistory/types'
 import type { TimeSpan } from '~/entities/weatherHistory/utils'
 
 defineComponent({ name: 'TemperaturesChart' })
 
-type DailyTemperatures = Pick<DailyWeather, 'time' | 'temperature2mMax' | 'temperature2mMin'>
-
 type TemperatureChartProps = {
-  dailyWeather: DailyTemperatures[]
+  dailyWeather: DailyWeather[]
   timeSpan: TimeSpan
 }
 const props = defineProps<TemperatureChartProps>()
 const temperaturesChart = ref<HTMLCanvasElement>()
-
-const aggregateByMonth = (dailyWeather: DailyTemperatures[]): DailyTemperatures[] => {
-  const months = new Map<string, DailyTemperatures>()
-
-  dailyWeather.forEach((dailyWeather) => {
-    const monthYear = format(new Date(dailyWeather.time), 'MMM yyyy')
-    if (!months.has(monthYear)) {
-      const monthDate = parse(monthYear, 'MMM yyyy', new Date())
-      months.set(monthYear, {
-        time: monthDate,
-        temperature2mMax: { ...dailyWeather.temperature2mMax },
-        temperature2mMin: { ...dailyWeather.temperature2mMin },
-      })
-    }
-    else {
-      const existing = months.get(monthYear)
-      if (existing) {
-        existing.temperature2mMax.value = Math.max(existing.temperature2mMax.value, dailyWeather.temperature2mMax.value)
-        existing.temperature2mMin.value = Math.min(existing.temperature2mMin.value, dailyWeather.temperature2mMin.value)
-      }
-    }
-  })
-
-  return Array.from(months.values())
-}
 
 const { t } = useI18n()
 
@@ -52,12 +25,14 @@ const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
   const maxTemperatureLabel = t('entities.weatherHistory.maxTemperature', { unit: props.dailyWeather[0]?.temperature2mMax.unit })
   const dailyMaxTemperature = props.dailyWeather.map(dailyWeather => dailyWeather.temperature2mMax.value)
   const maxTemperatureColor = 'rgba(255, 99, 132, 1)'
+  const compareMaxTemperature = (num1: number, num2: number) => Math.max(num1, num2)
+  const monthlyMaxTemperature = aggregateDailyWeatherByMonth(props.dailyWeather, compareMaxTemperature)
 
   const minTemperatureLabel = t('entities.weatherHistory.minTemperature', { unit: props.dailyWeather[0]?.temperature2mMin.unit })
   const dailyMinTemperature = props.dailyWeather.map(dailyWeather => dailyWeather.temperature2mMin.value)
   const minTemperatureColor = 'rgba(54, 162, 235, 1)'
-
-  const monthlyTemperatures = aggregateByMonth(props.dailyWeather)
+  const compareMinTemperature = (num1: number, num2: number) => Math.min(num1, num2)
+  const monthlyMinTemperature = aggregateDailyWeatherByMonth(props.dailyWeather, compareMinTemperature)
 
   const timeSpanMap: ChartDataPerTimeSpan = {
     weekly: {
@@ -99,20 +74,20 @@ const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
       ],
     },
     yearly: {
-      labels: monthlyTemperatures.map(dailyWeather => format(dailyWeather.time, 'MMM yyyy')),
+      labels: monthlyMaxTemperature.map(dailyWeather => format(dailyWeather.time, 'MMM yyyy')),
       datasets: [
         {
           backgroundColor: maxTemperatureColor,
           borderColor: maxTemperatureColor,
           label: maxTemperatureLabel,
-          data: monthlyTemperatures.map(dailyWeather => dailyWeather.temperature2mMax.value),
+          data: monthlyMaxTemperature.map(dailyWeather => dailyWeather.temperature2mMax.value),
           borderWidth: 1,
         },
         {
           backgroundColor: minTemperatureColor,
           borderColor: minTemperatureColor,
           label: minTemperatureLabel,
-          data: monthlyTemperatures.map(dailyWeather => dailyWeather.temperature2mMin.value),
+          data: monthlyMinTemperature.map(dailyWeather => dailyWeather.temperature2mMin.value),
           borderWidth: 1,
         },
       ],

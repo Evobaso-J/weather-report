@@ -66,8 +66,8 @@ const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncDat
 const weatherHistoryRepo = weatherHistoryRepository()
 const currentTimeSpan = ref<TimeSpan>('weekly')
 const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherHistoryRepo.query({
-  latitude: currentCity.value?.latitude ?? 90,
-  longitude: currentCity.value?.longitude ?? 90,
+  latitude: currentCity.value?.latitude ?? 45.448154,
+  longitude: currentCity.value?.longitude ?? 9.169279,
   timeSpan: currentTimeSpan.value,
 }), {
   transform: unwrapResult,
@@ -85,7 +85,7 @@ const tabs = [{
   key: 'history',
 }] as const satisfies (TabItem & { key: string })[]
 
-const activeTab = ref<(typeof tabs)[number]>(tabs[0])
+const activeTab = ref<(typeof tabs)[number]>(tabs[1])
 
 const changeTab = (index: number) => {
   const newTab = tabs[index]
