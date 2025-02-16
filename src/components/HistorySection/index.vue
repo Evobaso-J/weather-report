@@ -6,17 +6,19 @@
         v-if="fetchingStatus !== 'success'"
         :status="fetchingStatus"
       />
-      <template v-else>
+      <div
+        v-else
+        class="flex flex-col gap-7 overflow-hidden"
+      >
         <HistorySectionRainChart
           :time-span="timeSpan"
           :daily-weather="weatherHistory"
         />
-        <pre
-          class="overflow-scroll"
-        >
-        {{ weatherHistory }}
-      </pre>
-      </template>
+        <HistorySectionTemperaturesChart
+          :time-span="timeSpan"
+          :daily-weather="weatherHistory"
+        />
+      </div>
     </div>
   </section>
 </template>
