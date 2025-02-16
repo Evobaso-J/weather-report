@@ -34,6 +34,7 @@
     }
   },
   "error": {
+    "chartNotLoaded": "Chart could not be loaded. Please contact support if the error persists",
     "dataFetchingError": "Error fetching data",
     "noElementFound": "No element found"
   },

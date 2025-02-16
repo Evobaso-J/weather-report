@@ -6,12 +6,17 @@
         v-if="fetchingStatus !== 'success'"
         :status="fetchingStatus"
       />
-      <pre
-        v-else
-        class="overflow-scroll"
-      >
+      <template v-else>
+        <HistorySectionRainChart
+          :time-span="timeSpan"
+          :daily-weather="weatherHistory"
+        />
+        <pre
+          class="overflow-scroll"
+        >
         {{ weatherHistory }}
       </pre>
+      </template>
     </div>
   </section>
 </template>
@@ -20,11 +25,13 @@
 import type { TimeSpanSelectorEmits } from './TimeSpanSelector.vue'
 import type { FetchingStatus } from '~/pages/index.vue'
 import type { DailyWeather } from '~/entities/weatherHistory/types'
+import type { TimeSpan } from '~/entities/weatherHistory/utils'
 
 defineComponent({ name: 'HistorySection' })
 type HistorySectionProps = {
   weatherHistory: DailyWeather[]
   fetchingStatus: FetchingStatus
+  timeSpan: TimeSpan
 }
 defineProps<HistorySectionProps>()
 
