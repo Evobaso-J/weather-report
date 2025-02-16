@@ -85,7 +85,7 @@ const tabs = [{
   key: 'history',
 }] as const satisfies (TabItem & { key: string })[]
 
-const activeTab = ref<(typeof tabs)[number]>(tabs[1])
+const activeTab = ref<(typeof tabs)[number]>(tabs[0])
 
 const changeTab = (index: number) => {
   const newTab = tabs[index]
