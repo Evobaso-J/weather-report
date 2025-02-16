@@ -25,7 +25,7 @@
           :name="'i-mdi-map-marker-radius'"
           class="text-primary"
         />
-        {{ `${option.name} - ${option.country}, ${option.admin1}` }}
+        {{ formatCityString(option) }}
       </div>
     </template>
   </UInputMenu>
@@ -33,6 +33,7 @@
 
 <script setup lang='ts'>
 import { cityRepository } from '~/entities/city/repository'
+import type { City } from '~/entities/city/types'
 
 defineComponent({ name: 'CitySelector' })
 
@@ -53,4 +54,12 @@ const search = async (q: string) => {
 }
 
 const { setCurrentCity, currentCity } = useCityStore()
+
+const formatCityString = ({ name, country, admin1 }: City) => {
+  const mainCityString = `${name} - ${country}`
+  if (admin1) {
+    return `${mainCityString}, ${admin1}`
+  }
+  return mainCityString
+}
 </script>
