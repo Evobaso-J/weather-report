@@ -45,14 +45,17 @@ const aggregateByMonth = (dailyWeather: DailyTemperatures[]): DailyTemperatures[
   return Array.from(months.values())
 }
 
+const { t } = useI18n()
+
 type ChartDataPerTimeSpan = Record<TimeSpan, Chart['data']>
-
 const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
-  const maxTemperatureLabel = `Max Temperature ${(props.dailyWeather[0]?.temperature2mMax.unit ?? '')}`
+  const maxTemperatureLabel = t('entities.weatherHistory.maxTemperature', { unit: props.dailyWeather[0]?.temperature2mMax.unit })
   const dailyMaxTemperature = props.dailyWeather.map(dailyWeather => dailyWeather.temperature2mMax.value)
+  const maxTemperatureColor = 'rgba(255, 99, 132, 1)'
 
-  const minTemperatureLabel = `Min Temperature ${(props.dailyWeather[0]?.temperature2mMin.unit ?? '')}`
+  const minTemperatureLabel = t('entities.weatherHistory.minTemperature', { unit: props.dailyWeather[0]?.temperature2mMin.unit })
   const dailyMinTemperature = props.dailyWeather.map(dailyWeather => dailyWeather.temperature2mMin.value)
+  const minTemperatureColor = 'rgba(54, 162, 235, 1)'
 
   const monthlyTemperatures = aggregateByMonth(props.dailyWeather)
 
@@ -61,15 +64,15 @@ const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
       labels: props.dailyWeather.map(dailyWeather => format(dailyWeather.time, 'EEE d MMM')),
       datasets: [
         {
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: maxTemperatureColor,
+          borderColor: maxTemperatureColor,
           label: maxTemperatureLabel,
           data: dailyMaxTemperature,
           borderWidth: 1,
         },
         {
-          backgroundColor: 'rgba(54, 162, 235, 1)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: minTemperatureColor,
+          borderColor: minTemperatureColor,
           label: minTemperatureLabel,
           data: dailyMinTemperature,
           borderWidth: 1,
@@ -80,15 +83,15 @@ const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
       labels: props.dailyWeather.map(dailyWeather => format(dailyWeather.time, 'd MMM')),
       datasets: [
         {
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: maxTemperatureColor,
+          borderColor: maxTemperatureColor,
           label: maxTemperatureLabel,
           data: dailyMaxTemperature,
           borderWidth: 1,
         },
         {
-          backgroundColor: 'rgba(54, 162, 235, 1)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: minTemperatureColor,
+          borderColor: minTemperatureColor,
           label: minTemperatureLabel,
           data: dailyMinTemperature,
           borderWidth: 1,
@@ -99,15 +102,15 @@ const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
       labels: monthlyTemperatures.map(dailyWeather => format(dailyWeather.time, 'MMM yyyy')),
       datasets: [
         {
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: maxTemperatureColor,
+          borderColor: maxTemperatureColor,
           label: maxTemperatureLabel,
           data: monthlyTemperatures.map(dailyWeather => dailyWeather.temperature2mMax.value),
           borderWidth: 1,
         },
         {
-          backgroundColor: 'rgba(54, 162, 235, 1)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: minTemperatureColor,
+          borderColor: minTemperatureColor,
           label: minTemperatureLabel,
           data: monthlyTemperatures.map(dailyWeather => dailyWeather.temperature2mMin.value),
           borderWidth: 1,

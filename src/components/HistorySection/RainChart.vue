@@ -43,10 +43,11 @@ const aggregateByMonth = (dailyWeather: DailyRainSum[]): DailyRainSum[] => {
   return Array.from(months.values())
 }
 
-type ChartDataPerTimeSpan = Record<TimeSpan, Chart['data']>
+const { t } = useI18n()
 
+type ChartDataPerTimeSpan = Record<TimeSpan, Chart['data']>
 const chartDataPerTimeSpan = computed<ChartDataPerTimeSpan[TimeSpan]>(() => {
-  const label = `Rainfall ${(props.dailyWeather[0]?.rainSum.unit ?? '')}`
+  const label = t('entities.weatherHistory.rainSum', { unit: props.dailyWeather[0]?.rainSum.unit })
 
   const monthlyRainSum = aggregateByMonth(props.dailyWeather)
   const dailyRainValues = props.dailyWeather.map(dailyWeather => dailyWeather.rainSum.value)

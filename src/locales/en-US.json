@@ -30,7 +30,10 @@
     "weatherHistory": {
       "errors": {
         "failedToFetchWeatherHistoryData": "Failed to fetch weather history data"
-      }
+      },
+      "maxTemperature": "Max temperature ({unit})",
+      "minTemperature": "Min temperature ({unit})",
+      "rainSum": "Rainfall sum ({unit})"
     }
   },
   "error": {
