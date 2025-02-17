@@ -2,7 +2,7 @@ import { isErr, unwrapErr, unwrapOk } from 'option-t/plain_result'
 import type { MyResult } from '~/helpers'
 import type { Notification } from '#ui/types'
 
-export const useUnwrapResult = (config?: {silent: boolean}) => {
+export const useUnwrapResult = (config?: { silent: boolean }) => {
   const toast = useToast()
   const { t } = useI18n()
   const id = useId()

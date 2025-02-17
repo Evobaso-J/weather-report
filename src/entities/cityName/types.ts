@@ -16,10 +16,9 @@ export type APICityNameResponse = {
 }
 
 export type CityName = {
-  id: number,
-  name: string,
-  latitude: number,
-  longitude: number,
-  country: string,
+  id: number
+  name: string
+  latitude: number
+  longitude: number
+  country: string
 }
-

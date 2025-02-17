@@ -5,8 +5,8 @@ import { REVERSE_GEOCODING_API_URL } from './constants'
 
 const API_CITY_NAME_RESPONSE_MOCK: APICityNameResponse = {
   place_id: 1,
-  lat: "-1",
-  lon: "-1",
+  lat: '-1',
+  lon: '-1',
   name: 'testName',
   display_name: 'testDisplayName',
   type: 'testType',
@@ -54,7 +54,7 @@ describe('cityNameRepository', () => {
           lon: 1,
           format: 'json',
           zoom: 10,
-        }
+        },
       }
       expect($fetch).toHaveBeenCalledWith(REVERSE_GEOCODING_API_URL, expected)
     })
