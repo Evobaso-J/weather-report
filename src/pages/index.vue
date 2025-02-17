@@ -81,12 +81,14 @@ const { data: weatherForecast, status: weatherForecastCallStatus }
 const weatherHistoryRepo = weatherHistoryRepository()
 const currentTimeSpan = ref<TimeSpan>('weekly')
 const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(
-  () =>
-    weatherHistoryRepo.query({
-      latitude: currentCity.value?.latitude ?? 45.448154,
-      longitude: currentCity.value?.longitude ?? 9.169279,
+  () => {
+    if (!currentCity.value) return Promise.resolve(createOk([]))
+    return weatherHistoryRepo.query({
+      latitude: currentCity.value.latitude,
+      longitude: currentCity.value.longitude,
       timeSpan: currentTimeSpan.value,
-    }),
+    })
+  },
   {
     transform: unwrapResult,
     watch: [currentCity, currentTimeSpan],
