@@ -15,7 +15,9 @@
         <span
           class="truncate"
           :class="[selected && 'text-primary-500']"
-        >{{ item.label }}</span>
+        >{{
+          item.label
+        }}</span>
       </template>
     </UTabs>
     <UCard class="w-full">
@@ -29,7 +31,11 @@
         :weather-history="weatherHistory ?? []"
         :fetching-status="fetchingStatus"
         :time-span="currentTimeSpan"
-        @change-timespan="(val) => { currentTimeSpan = val }"
+        @change-timespan="
+          (val) => {
+            currentTimeSpan = val;
+          }
+        "
       />
     </UCard>
   </section>
@@ -55,36 +61,47 @@ const { currentCity, setCurrentCity } = useCityStore()
 const { unwrapResult } = useUnwrapResult()
 
 const weatherForecastRepo = weatherForecastRepository()
-const { data: weatherForecast, status: weatherForecastCallStatus } = useAsyncData(() => weatherForecastRepo.query({
-  latitude: currentCity.value?.latitude ?? 0,
-  longitude: currentCity.value?.longitude ?? 0,
-  forecast_days: FORECAST_DAYS,
-}), {
-  transform: unwrapResult,
-  watch: [currentCity],
-})
+const { data: weatherForecast, status: weatherForecastCallStatus }
+  = useAsyncData(
+    () =>
+      weatherForecastRepo.query({
+        latitude: currentCity.value?.latitude ?? 0,
+        longitude: currentCity.value?.longitude ?? 0,
+        forecast_days: FORECAST_DAYS,
+      }),
+    {
+      transform: unwrapResult,
+      watch: [currentCity],
+    },
+  )
 
 const weatherHistoryRepo = weatherHistoryRepository()
 const currentTimeSpan = ref<TimeSpan>('weekly')
-const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(() => weatherHistoryRepo.query({
-  latitude: currentCity.value?.latitude ?? 45.448154,
-  longitude: currentCity.value?.longitude ?? 9.169279,
-  timeSpan: currentTimeSpan.value,
-}), {
-  transform: unwrapResult,
-  watch: [currentCity, currentTimeSpan],
-})
+const { data: weatherHistory, status: weatherHistoryCallStatus } = useAsyncData(
+  () =>
+    weatherHistoryRepo.query({
+      latitude: currentCity.value?.latitude ?? 45.448154,
+      longitude: currentCity.value?.longitude ?? 9.169279,
+      timeSpan: currentTimeSpan.value,
+    }),
+  {
+    transform: unwrapResult,
+    watch: [currentCity, currentTimeSpan],
+  },
+)
 
-const tabs = [{
-  label: t('weatherForecast'),
-  icon: 'i-mdi-weather-partly-rainy',
-  key: 'forecast',
-},
-{
-  label: t('weatherHistory'),
-  icon: 'i-mdi-weather-cloudy-clock',
-  key: 'history',
-}] as const satisfies (TabItem & { key: string })[]
+const tabs = [
+  {
+    label: t('weatherForecast'),
+    icon: 'i-mdi-weather-partly-rainy',
+    key: 'forecast',
+  },
+  {
+    label: t('weatherHistory'),
+    icon: 'i-mdi-weather-cloudy-clock',
+    key: 'history',
+  },
+] as const satisfies (TabItem & { key: string })[]
 
 const activeTab = ref<(typeof tabs)[number]>(tabs[0])
 
@@ -99,17 +116,20 @@ const fetchingStatus = computed<FetchingStatus>(() => {
   const callStatusMap = {
     forecast: weatherForecastCallStatus.value,
     history: weatherHistoryCallStatus.value,
-  } as const satisfies Record<(typeof tabs)[number]['key'], AsyncDataRequestStatus>
+  } as const satisfies Record<
+    (typeof tabs)[number]['key'],
+    AsyncDataRequestStatus
+  >
 
   const callStatus = callStatusMap[activeTab.value.key]
   if (callStatus === 'pending') return 'loading'
   if (callStatus === 'error') return 'error'
-  if (callStatus === 'success' && !weatherForecast.value?.length) return 'empty'
+  if (callStatus === 'success' && !weatherForecast.value?.length)
+    return 'empty'
   return 'success'
 })
 
-
-const { unwrapResult: silentUnwrapResult } = useUnwrapResult({silent: true})
+const { unwrapResult: silentUnwrapResult } = useUnwrapResult({ silent: true })
 const cityNameRepo = cityNameRepository()
 onMounted(() => {
   const options = {
@@ -117,15 +137,15 @@ onMounted(() => {
     timeout: 5000,
     maximumAge: 0,
   }
-  const success: PositionCallback =async (pos) => {
+  const success: PositionCallback = async (pos) => {
     const { latitude, longitude } = pos.coords
     const foundCity = await cityNameRepo.query({ latitude, longitude })
-    
+
     const result = silentUnwrapResult(foundCity)
     if (!result[0]) return
     setCurrentCity(result[0])
   }
-  
+
   navigator.geolocation.getCurrentPosition(success, undefined, options)
 })
 </script>
