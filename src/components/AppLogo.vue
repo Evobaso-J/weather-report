@@ -1,9 +1,10 @@
 <template>
   <div class="flex gap-3 items-center">
     <NuxtImg
-      src="/images/logo.svg"
+      class="rounded-lg overflow-hidden"
+      src="/images/logo.png"
       alt="Logo"
-      :width="40"
+      :width="80"
     />
     <span class="text-2xl">
       {{ $t('app.name') }}
