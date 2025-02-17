@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { aggregateDailyWeatherByMonth } from './chartUtils'
-import type { DailyWeather } from '~/entities/weatherHistory/types'
 
-const DAILY_WEATHER_MOCK: DailyWeather[] = [
+const DAILY_WEATHER_MOCK = [
   {
     time: new Date('2021-01-01'),
     rainSum: { value: 1, unit: 'mm' },
