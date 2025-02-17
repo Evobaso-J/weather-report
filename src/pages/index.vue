@@ -42,6 +42,7 @@ import { FORECAST_DAYS } from '~/entities/weatherForecast/constants'
 import { weatherForecastRepository } from '~/entities/weatherForecast/repository'
 import { weatherHistoryRepository } from '~/entities/weatherHistory/repository'
 import type { TimeSpan } from '~/entities/weatherHistory/utils'
+import { cityNameRepository } from '~/entities/cityName/repository'
 
 const { t } = useI18n()
 
@@ -49,7 +50,7 @@ useHead({
   title: t('home'),
 })
 
-const { currentCity } = useCityStore()
+const { currentCity, setCurrentCity } = useCityStore()
 
 const { unwrapResult } = useUnwrapResult()
 
@@ -105,5 +106,26 @@ const fetchingStatus = computed<FetchingStatus>(() => {
   if (callStatus === 'error') return 'error'
   if (callStatus === 'success' && !weatherForecast.value?.length) return 'empty'
   return 'success'
+})
+
+
+const { unwrapResult: silentUnwrapResult } = useUnwrapResult({silent: true})
+const cityNameRepo = cityNameRepository()
+onMounted(() => {
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  }
+  const success: PositionCallback =async (pos) => {
+    const { latitude, longitude } = pos.coords
+    const foundCity = await cityNameRepo.query({ latitude, longitude })
+    
+    const result = silentUnwrapResult(foundCity)
+    if (!result[0]) return
+    setCurrentCity(result[0])
+  }
+  
+  navigator.geolocation.getCurrentPosition(success, undefined, options)
 })
 </script>
