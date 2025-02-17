@@ -2,6 +2,14 @@ import { isErr, unwrapErr, unwrapOk } from 'option-t/plain_result'
 import type { MyResult } from '~/helpers'
 import type { Notification } from '#ui/types'
 
+/**
+ * Provides a function to unwrap a result from option-t and handle errors.
+ * In case of a nullish or Err value, a toast notification is shown to the end user.
+ *
+ * @param config - Optional configuration object.
+ * @param config.silent - If true, suppresses error notifications.
+ * @returns An object containing the unwrapResult function.
+ */
 export const useUnwrapResult = (config?: { silent: boolean }) => {
   const toast = useToast()
   const { t } = useI18n()

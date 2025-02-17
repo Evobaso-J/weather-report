@@ -1,5 +1,14 @@
 import { Chart, type ChartConfiguration } from 'chart.js/auto'
 
+/**
+ * Initializes and manages a Chart.js chart through Vue references and reactivity.
+ * NOTE: this requires a canvas element to be present in the template.
+ *
+ * @param chartConfig
+ * @param chartConfig.chartRef - Reference to the HTML canvas element for the chart.
+ * @param chartConfig.data - Reactive reference to the chart data.
+ * @param chartConfig.type - Type of the chart. E.g. 'line', 'bar', 'pie'.
+ */
 export const useChart = (chartConfig: {
   chartRef: Ref<HTMLCanvasElement | undefined>
   data: Ref<Chart['data']>

@@ -6,6 +6,13 @@ const getUTCMonth = (date: Date): Date => {
 }
 
 type AggregatorFunction = (val1: number, val2: number) => number
+/**
+ * Aggregates daily weather data by month to easen rendering via chart.
+ *
+ * @param data - Array of daily weather data.
+ * @param aggregator - Function to aggregate weather data. E.g. Math.max, Math.min, Math.avg.
+ * @returns Array of aggregated daily weather data by month.
+ */
 export const aggregateDailyWeatherByMonth = (data: DailyWeather[], aggregator: AggregatorFunction): DailyWeather[] => {
   const months = new Map<string, DailyWeather>()
 
