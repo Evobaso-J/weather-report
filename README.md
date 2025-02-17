@@ -22,9 +22,21 @@ There's no reason not to choose **vitest** in this context. It's the most comple
 - a ton of utility functions to [run test even on TypeScript's type level](src/helpers.test.ts)
 
 ### Utils
-As suggested, **option-t** was the package of choice for handling the result of API calls, as it provides a simple and clean way to handle the API requests and responses.
+As suggested, **option-t** was the package of choice for handling the result of API calls. With the help of the [useUnwrapResult](src/composables/useUnwrapResult.ts) composable, it was possible to unwrap those results and
+show the user the appropriate feedback.
 **Chart.js** did all the heavy lifting for the charts, while **dayjs** was used for date manipulation.
+I thought it was a good idea to include `i18n` for the sake of clean text-component interpolation without
+leaving some dirty strings interposed with components in the code, but ultimately it wasn't really needed.
 
+## Architecture
+The Repository layer is responsible for handling the data manipulation and the API calls. It's represented by the `entities` folder.
+For each entity, there's a corresponding file that contains:
+    - Its type definition
+    - The repository function that handles the API call and the data manipulation
+    - The constants that are used in the repository function, such as the endpoint url
+    - In some cases, when the repository gets too cluttered, a utils file is created to handle the data manipulation
+
+There was no
 
 ## Setup
 
@@ -61,7 +73,3 @@ Locally preview production build:
 ```bash
 pnpm preview
 ```
-
-## Structure
-
-
