@@ -42,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import { createOk } from 'option-t/plain_result'
 import type { TabItem } from '#ui/types'
 import type { AsyncDataRequestStatus } from '#app'
 import { FORECAST_DAYS } from '~/entities/weatherForecast/constants'
@@ -63,12 +64,14 @@ const { unwrapResult } = useUnwrapResult()
 const weatherForecastRepo = weatherForecastRepository()
 const { data: weatherForecast, status: weatherForecastCallStatus }
   = useAsyncData(
-    () =>
-      weatherForecastRepo.query({
-        latitude: currentCity.value?.latitude ?? 0,
-        longitude: currentCity.value?.longitude ?? 0,
+    () => {
+      if (!currentCity.value) return Promise.resolve(createOk([]))
+      return weatherForecastRepo.query({
+        latitude: currentCity.value.latitude,
+        longitude: currentCity.value.longitude,
         forecast_days: FORECAST_DAYS,
-      }),
+      })
+    },
     {
       transform: unwrapResult,
       watch: [currentCity],
