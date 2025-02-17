@@ -18,6 +18,11 @@
         "failedToFetchCityData": "Failed to fetch city data"
       }
     },
+    "cityName": {
+      "errors": {
+        "failedToFetchCityNameData": "Failded to fetch city name data"
+      }
+    },
     "weatherForecast": {
       "cloudCover": "Cloud Cover",
       "errors": {

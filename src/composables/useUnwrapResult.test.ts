@@ -77,5 +77,12 @@ describe('useUnwrapResult', () => {
         title: 'error message',
       })
     })
+    it('should not display a notification if the silent option is true', () => {
+      const { unwrapResult } = useUnwrapResult({ silent: true })
+
+      unwrapResult(null)
+
+      expect(toastAddMock).not.toHaveBeenCalled()
+    })
   })
 })
