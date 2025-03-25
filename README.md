@@ -1,7 +1,7 @@
 # Weather Report 
 <sup><sup>Wait, is that a JoJo reference?</sup></sup>
 
-My personal implementation of the technical case, which allows the user to:
+My personal implementation of a technical case, which allows the user to:
 - Search for a specific location and view the weather data for that location
 - View the weather forecast for the next 16 days of the selected location
 - View the given location's historical weather data for either:
